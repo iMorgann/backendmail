@@ -11,13 +11,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/send", async (req, res) => {
-  const { smtpServer, smtpPort, username, password, from, to, subject, message } = req.body;
+  const { smtpServer, smtpPort, username, password, from, to, replyTo, subject, message } = req.body;
 
   try {
     const transporter = nodemailer.createTransport({
       host: smtpServer,
       port: parseInt(smtpPort),
-      secure: smtpPort === 465, // Use secure connection for port 465
+      secure: smtpPort === "465", // Use secure connection for port 465
       auth: {
         user: username,
         pass: password,
@@ -30,6 +30,7 @@ app.post("/send", async (req, res) => {
     const mailOptions = {
       from,
       to,
+      replyTo, // Include Reply-To field
       subject,
       text: message,
     };
